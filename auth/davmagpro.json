@@ -1,0 +1,22 @@
+{
+  "SHOPIFY_SHOP": "dav-magpro.myshopify.com",
+  "SHOPIFY_ACCESS_TOKEN": "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",
+  "ENDPOINT_PRODUCTS_ALL": "/admin/api/2023-10/products.json",
+  "ENDPOINT_PRODUCTCATEGORIES": "/admin/api/2023-10/products.json",
+  "ENDPOINT_CUSTOMERS_ALL": "/admin/api/2023-10/customers.json",
+  "ENDPOINT_ORDERS_ALL": "/admin/api/2023-10/orders.json",
+  "ENDPOINT_ORDERS_BYID": "/admin/api/2023-10/orders/",
+  "ENDPOINT_ORDERS_BYDATE": "admin/api/2023-10/orders.json?updated_at=2023-01-01T00:00:00",
+  "FOLDER_ID": "290567",
+  "EBP_SUBSCRIPTION_KEY": "15854f26663045caa29daf890731beb1",
+  "AUTHORIZE_URL": "https://api-login.ebp.com/connect/authorize",
+  "TOKEN_URL": "https://api-login.ebp.com/connect/token",
+  "CALLBACK_URI": "http%3A%2F%2F185.41.152.157%3A80%2FDavMagpro%2FEDIConnect_EBP%2Findex.php",
+  "CLIENT_ID": "jupiterwithoutpkce",
+  "CLIENT_SECRET": "78f68eac-c4e2-4221-9836-d66db48a75f0",
+  "ENDPOINT_PATH_EBP": "https://api-developpeurs.ebp.com/gescom/api/v1/Folders/",
+  "ENDPOINT_PRODUCTS_ALL_EBP": "/Items/ItemsExtentedQuery",
+  "ENDPOINT_DEVIS_ALL_EBP": "/Documents/SaleDocument?Duration=100000&DocumentType=Devis",
+  "WEBHOOK_KEYS_FILE": "/var/www/html/webhook/davmagpro/keys/DAVMAGPRO_Key_EBP_Token.json"
+}
+

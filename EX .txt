@@ -1,0 +1,37 @@
+EX :
+http://185.41.152.157/EDIConnect_Ultimate/cron/Sync.php?client=bdc&endpoint=sage&flux=customer&typeexport=id&valueexport=45356
+===========================
+endpoint:
+
+dolibarr
+ebay
+ebp
+hubspot
+prestashop
+sage
+sellsy
+shopify
+wordpress
+kezia
+odoo
+
+===========================
+flux:
+
+orders (commadnes)
+products
+customers (clients)
+stock
+devis
+invoices (factures)
+shipments (livraison)
+purchase (preparation)
+===========================
+typeexport & valueexport:
+
+all => all
+id => 342
+limit => 342
+date => date
+
+===========================
