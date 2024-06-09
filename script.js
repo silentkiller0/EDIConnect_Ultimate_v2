@@ -23,6 +23,14 @@ checkboxes.forEach((checkbox) => {
   });
 });
 
+function generateURL() {
+  // Votre code pour générer l'URL
+  var generatedUrl = "URL_généré_ici";
+
+  // Mise à jour de l'élément <p> avec l'URL généré
+  document.getElementById("generated-url-display").innerText = generatedUrl;
+}
+
 // Function to generate the URL
 function generateURL() {
   // Logic to generate the URL

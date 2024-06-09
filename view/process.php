@@ -285,6 +285,18 @@
 <button class="generate-button" onclick="generateURL()">Generate URL</button>
 <p id="generated-url"></p>
 
+<!-- ---------------- GENERATED LINK SECTION ---------------- -->
+<div class="left-content">
+    <div class="activities">
+        <div class="activity-container">
+            <h3 class="subtitle">Lien généré :</h3>
+            <p id="generated-url-display" class="generated-url"></p>
+        </div>
+    </div>
+</div>
+<!-- ---------------- END GENERATED LINK SECTION ---------------- -->
+
+
 <!-- JavaScript -->
 <script>
     document.querySelectorAll('.filtre-ck').forEach(checkbox => {
