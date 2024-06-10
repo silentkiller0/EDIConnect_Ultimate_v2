@@ -79,6 +79,10 @@
             color: green;
         }
 
+        .client-details {
+            margin-top: 20px;
+        }
+
         @media (max-width: 768px) {
             .left-content, .right-content {
                 flex: 1 1 100%;
@@ -90,28 +94,6 @@
             }
         }
     </style>
-    <script>
-        function submitForm(event) {
-            event.preventDefault();
-
-            const form = document.getElementById('clientForm');
-            const formData = new FormData(form);
-
-            fetch('<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(data => {
-                const nom = document.getElementById('nom').value;
-                document.getElementById('successMessage').textContent = "Nouveau client " + nom + " ajouté avec succès.";
-                const formHeight = form.offsetHeight;
-                form.reset();
-                form.style.height = formHeight + 'px';
-            })
-            .catch(error => console.error('Error:', error));
-        }
-    </script>
 </head>
 <body>
 <div class="container">
@@ -120,7 +102,7 @@
             <div class="activity-container">
                 <h3 class="subtitle">Ajouter un nouveau client :</h3>
                 <div class="filtres-group">
-                    <form id="clientForm" onsubmit="submitForm(event)">
+                    <form id="clientForm" method="POST">
                         <label for="nom">Nom du client:</label><br>
                         <input type="text" id="nom" name="nom" required><br>
                         <label for="details">Détails:</label><br>
@@ -138,17 +120,17 @@
             <div class="activity-container">
                 <h3 class="subtitle">Modifier :</h3>
                 <div class="filtres-group">
-                    <form id="clientForm2" onsubmit="submitForm(event)">
+                    <form id="clientForm2">
                         <label for="nom2">Nom du client:</label><br>
                         <div class="select-dropdown">
-                            <select class="form__select" id="nom2" name="nom2">
+                            <select class="form__select" onchange="chargerDetailsClient()" id="nom2" name="nom2">
                                 <option selected>Veuillez sélectionner un client</option>
                                 <?php
                                 $repertoire = "../auth/";
 
                                 if (is_dir($repertoire)) {
                                     $fichiers = scandir($repertoire);
-                                    
+
                                     foreach ($fichiers as $fichier) {
                                         if ($fichier != "." && $fichier != "..") {
                                             $nomFichierSansExtension = pathinfo($fichier, PATHINFO_FILENAME);
@@ -161,39 +143,78 @@
                                 ?>
                             </select>
                         </div>
-                        <label for="details2">Détails:</label><br>
-                        <textarea id="details2" name="details2" required></textarea>
-                        <input type="submit" value="Modifier">
-                        <span id="successMessage2"></span>
-                        <label id="msg2"></label><br>
                     </form>
+                </div>
+                <!-- Ajout de la section pour afficher les détails du client -->
+                <div class="client-details">
+                    <h4>Détails du client:</h4>
+                    <p id="clientDetails"></p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<script>
+    function chargerDetailsClient() {
+        var selectedClient = document.getElementById('nom2').value;
+        var jsonFilePath = "auth/" + selectedClient + ".json";
+        fetch(jsonFilePath)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('clientDetails').innerText = JSON.stringify(data);
+            })
+            .catch(error => {
+                console.error('Une erreur est survenue lors du chargement des données du client:', error);
+                document.getElementById('clientDetails').innerText = "Une erreur est survenue lors du chargement des données du client.";
+            });
+    }
+
+    function submitForm(event) {
+    event.preventDefault();
+    var formData = new FormData(document.getElementById('clientForm'));
+    var clientName = document.getElementById('nom').value; // Déclaration de la variable clientName
+    fetch("<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>", {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        if (data.trim() === 'Success') { // Vérification si la réponse du serveur est 'Success'
+            document.getElementById('successMessage').innerText = "Erreur lors de l'ajout du client.";
+        } else {
+            document.getElementById('successMessage').innerText = "Nouveau Client Ajouté (" + clientName + ") !";
+
+        }
+    })
+    .catch(error => {
+        console.error('Une erreur est survenue:', error);
+        document.getElementById('successMessage').innerText = "Une erreur est survenue.";
+    });
+}
+
+
+    document.getElementById('clientForm').addEventListener('submit', submitForm);
+</script>
+
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nom = $_POST["nom"] ?? $_POST["nom2"];
-    $details = $_POST["details"] ?? $_POST["details2"];
-
+    $nom = $_POST["nom"] ?? "";
+    $details = $_POST["details"] ?? "";
+    $details = str_replace(array("\r", "\n"), ' ', $details);
     $authDirectory = '../auth/';
-
     if (!is_dir($authDirectory)) {
         mkdir($authDirectory, 0777, true);
     }
-
     $fileName = $authDirectory . $nom . '.json';
-
-    $formattedDetails = str_replace('":"', '": "', json_encode($details));
-
+    $formattedDetails = json_encode($details);
     if (file_put_contents($fileName, $formattedDetails)) {
-        echo "<p>Nouveau client ajouté avec succès.</p>";
+        echo "Success";
     } else {
-        echo "<p>Une erreur est survenue lors de l'ajout du client.</p>";
+        echo "Error";
     }
 }
 ?>
+
 </body>
 </html>
