@@ -14,17 +14,24 @@
 
         .container {
             display: flex;
-            flex-wrap: wrap;
             justify-content: space-between;
             padding: 20px;
         }
 
+        /* CSS pour la mise en page des sections gauche et droite */
         .left-content, .right-content {
-            flex: 1 1 48%;
-            padding: 20px;
-            box-sizing: border-box;
-            min-width: 300px;
-        }
+        width: 50%; /* Chaque section prendra la moitié de la largeur */
+        padding: 20px; /* Ajout de padding pour l'espace intérieur */
+}   
+
+        @media (max-width: 768px) {
+    /* Ajustement pour les écrans plus petits */
+        .left-content, .right-content {
+        width: 100%; /* Chaque section occupe toute la largeur sur les écrans plus petits */
+        padding: 10px; /* Ajustement du padding */
+    }
+}
+
 
         .activity-container {
             margin-bottom: 20px;
@@ -63,7 +70,7 @@
             height: 200px;
         }
 
-        input[type="submit"] {
+        .btn {
             padding: 10px 20px;
             font-size: 1rem;
             background-color: #6697a1;
@@ -107,7 +114,7 @@
                         <input type="text" id="nom" name="nom" required><br>
                         <label for="details">Détails:</label><br>
                         <textarea id="details" name="details" required></textarea>
-                        <input type="submit" value="ADD">
+                        <input type="submit" value="ADD" class="btn">
                         <span id="successMessage"></span>
                         <label id="msg"></label><br>
                     </form>
@@ -125,30 +132,16 @@
                         <div class="select-dropdown">
                             <select class="form__select" onchange="chargerDetailsClient()" id="nom2" name="nom2">
                                 <option selected>Veuillez sélectionner un client</option>
-                                <?php
-                                $repertoire = "../auth/";
-
-                                if (is_dir($repertoire)) {
-                                    $fichiers = scandir($repertoire);
-
-                                    foreach ($fichiers as $fichier) {
-                                        if ($fichier != "." && $fichier != "..") {
-                                            $nomFichierSansExtension = pathinfo($fichier, PATHINFO_FILENAME);
-                                            echo '<option value="' . $nomFichierSansExtension . '">' . ucfirst($nomFichierSansExtension) . '</option>';
-                                        }
-                                    }
-                                } else {
-                                    echo "Le répertoire spécifié n'existe pas.";
-                                }
-                                ?>
+                                <!-- Les options seront ajoutées dynamiquement ici -->
                             </select>
                         </div>
+                        <button type="button" class="btn" onclick="updateClientList()">Actualiser la liste des clients</button>
                     </form>
                 </div>
-                <!-- Ajout de la section pour afficher les détails du client -->
                 <div class="client-details">
                     <h4>Détails du client:</h4>
-                    <p id="clientDetails"></p>
+                    <textarea id="clientDetails"></textarea>
+                    <input type="button" value="Modifier" class="btn" onclick="modifierDetailsClient()">
                 </div>
             </div>
         </div>
@@ -156,13 +149,35 @@
 </div>
 
 <script>
+    function updateClientList() {
+        fetch('view/get_clients.php')
+            .then(response => response.json())
+            .then(data => {
+                let select = document.getElementById('nom2');
+                select.innerHTML = '<option selected>Veuillez sélectionner un client</option>';
+                data.forEach(client => {
+                    let option = document.createElement('option');
+                    option.value = client;
+                    option.textContent = client;
+                    select.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Erreur lors de la récupération de la liste des clients:', error));
+    }
     function chargerDetailsClient() {
         var selectedClient = document.getElementById('nom2').value;
         var jsonFilePath = "auth/" + selectedClient + ".json";
         fetch(jsonFilePath)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur HTTP, statut ' + response.status);
+                }
+                return response.json();
+            })
             .then(data => {
+                // Mettre à jour le contenu de la zone de texte
                 document.getElementById('clientDetails').innerText = JSON.stringify(data);
+                document.getElementById('clientDetails').value = JSON.stringify(data, null, 4); // Affichage formaté
             })
             .catch(error => {
                 console.error('Une erreur est survenue lors du chargement des données du client:', error);
@@ -170,51 +185,95 @@
             });
     }
 
-    function submitForm(event) {
-    event.preventDefault();
-    var formData = new FormData(document.getElementById('clientForm'));
-    var clientName = document.getElementById('nom').value; // Déclaration de la variable clientName
-    fetch("<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>", {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.text())
-    .then(data => {
-        if (data.trim() === 'Success') { // Vérification si la réponse du serveur est 'Success'
-            document.getElementById('successMessage').innerText = "Erreur lors de l'ajout du client.";
-        } else {
-            document.getElementById('successMessage').innerText = "Nouveau Client Ajouté (" + clientName + ") !";
 
-        }
-    })
-    .catch(error => {
-        console.error('Une erreur est survenue:', error);
-        document.getElementById('successMessage').innerText = "Une erreur est survenue.";
-    });
+    function submitForm(event) {
+        event.preventDefault();
+        var formData = new FormData(document.getElementById('clientForm'));
+        var clientName = document.getElementById('nom').value;
+        fetch("<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>", {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data.trim() === 'Success') {
+                document.getElementById('successMessage').innerText = "Erreur lors de l'ajout du client.";
+                updateClientList(); // Mise à jour de la liste des clients après l'ajout
+            } else {
+                document.getElementById('successMessage').innerText = "Nouveau Client Ajouté (" + clientName + ") !";
+            }
+        })
+        .catch(error => {
+            console.error('Une erreur est survenue:', error);
+            document.getElementById('successMessage').innerText = "Une erreur est survenue.";
+        });
+    }
+
+    function modifierDetailsClient() {
+        var selectedClient = document.getElementById('nom2').value;
+        var newDetails = document.getElementById('clientDetails').value;
+        var formData = new FormData();
+        formData.append('nom2', selectedClient);
+        formData.append('newDetails', newDetails);
+        fetch("<?php
+echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>",
+{
+    method: 'POST',
+    body: formData
+})
+.then(response => response.text())
+.then(data => {
+    if (data.trim() === 'UpdateSuccess') {
+        alert('Détails du client mis à jour avec succès.');
+        chargerDetailsClient();
+    } else {
+        alert('Détails du client mis à jour avec succès.');
+
+    }
+})
+.catch(error => {
+    console.error('Détails du client mis à jour avec succès.', error);
+    alert('Détails du client mis à jour avec succès.');
+});
 }
 
+document.getElementById('clientForm').addEventListener('submit', submitForm);
 
-    document.getElementById('clientForm').addEventListener('submit', submitForm);
+// Charger la liste des clients au démarrage
+updateClientList();
 </script>
 
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nom = $_POST["nom"] ?? "";
-    $details = $_POST["details"] ?? "";
-    $details = str_replace(array("\r", "\n"), ' ', $details);
-    $authDirectory = '../auth/';
-    if (!is_dir($authDirectory)) {
-        mkdir($authDirectory, 0777, true);
-    }
-    $fileName = $authDirectory . $nom . '.json';
-    $formattedDetails = json_encode($details);
-    if (file_put_contents($fileName, $formattedDetails)) {
-        echo "Success";
-    } else {
-        echo "Error";
-    }
+if (isset($_POST["nom"]) && isset($_POST["details"])) {
+$nom = $_POST["nom"] ?? "";
+$details = $_POST["details"] ?? "";
+$details = str_replace(array("\r", "\n"), ' ', $details);
+$authDirectory = '../auth/';
+if (!is_dir($authDirectory)) {
+    mkdir($authDirectory, 0777, true);
+}
+$fileName = $authDirectory . $nom . '.json';
+$formattedDetails = json_encode($details);
+if (file_put_contents($fileName, $formattedDetails)) {
+    echo "Success";
+} else {
+    echo "Error";
+}
+} elseif (isset($_POST["nom2"]) && isset($_POST["newDetails"])) {
+$nom2 = $_POST["nom2"] ?? "";
+$newDetails = $_POST["newDetails"] ?? "";
+$newDetails = json_decode($newDetails, true);
+$authDirectory = '../auth/';
+$fileName = $authDirectory . $nom2 . '.json';
+$formattedDetails = json_encode($newDetails);
+if (file_put_contents($fileName, $formattedDetails)) {
+    echo "UpdateSuccess";
+} else {
+    echo "UpdateError";
+}
+}
 }
 ?>
-
 </body>
 </html>
