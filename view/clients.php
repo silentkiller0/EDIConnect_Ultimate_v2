@@ -17,22 +17,7 @@
             justify-content: space-between;
             padding: 20px;
         }
-
-        /* CSS pour la mise en page des sections gauche et droite */
-        .left-content, .right-content {
-        width: 50%; /* Chaque section prendra la moitié de la largeur */
-        padding: 20px; /* Ajout de padding pour l'espace intérieur */
-}   
-
-        @media (max-width: 768px) {
-    /* Ajustement pour les écrans plus petits */
-        .left-content, .right-content {
-        width: 100%; /* Chaque section occupe toute la largeur sur les écrans plus petits */
-        padding: 10px; /* Ajustement du padding */
-    }
-}
-
-
+        
         .activity-container {
             margin-bottom: 20px;
         }
@@ -43,77 +28,25 @@
             margin-bottom: 10px;
         }
 
-        .filtres-group {
-            margin-bottom: 20px;
-        }
-
-        .select-dropdown select, .form__select {
-            width: 100%;
-            padding: 10px;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 10px;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        textarea {
-            resize: none;
-            overflow: auto;
-            height: 200px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            font-size: 1rem;
-            background-color: #6697a1;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
         #successMessage {
             display: block;
             margin-top: 10px;
             color: green;
         }
-
-        .client-details {
-            margin-top: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .left-content, .right-content {
-                flex: 1 1 100%;
-                margin-bottom: 20px;
-            }
-
-            .subtitle {
-                font-size: 1.25rem;
-            }
-        }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="left-content">
+    <div class="left-content" style="width: 48%;height: 950px;">
         <div class="activities">
             <div class="activity-container">
-                <h3 class="subtitle">Ajouter un nouveau client :</h3>
+                <h3 class="subtitle"style="margin-left: 35px;">Ajouter un nouveau client :</h3>
                 <div class="filtres-group">
                     <form id="clientForm" method="POST">
-                        <label for="nom">Nom du client:</label><br>
-                        <input type="text" id="nom" name="nom" required><br>
+                    <label for="nom">Nom du client:</label><br>
+                        <input type="text" id="nom" name="nom" style="width: 100%;" required><br>
                         <label for="details">Détails:</label><br>
-                        <textarea id="details" name="details" required></textarea>
+                        <textarea id="details" name="details" style="width: 663px; height: 786px;"></textarea>
                         <input type="submit" value="ADD" class="btn">
                         <span id="successMessage"></span>
                         <label id="msg"></label><br>
@@ -122,15 +55,15 @@
             </div>
         </div>
     </div>
-    <div class="right-content">
+    <div class="right-content" style="width: 50%;height: 950px;">
         <div class="activities">
             <div class="activity-container">
-                <h3 class="subtitle">Modifier :</h3>
+                <h3 class="subtitle"style="margin-left: 28px;"> Modifier :</h3>
                 <div class="filtres-group">
                     <form id="clientForm2">
                         <label for="nom2">Nom du client:</label><br>
-                        <div class="select-dropdown">
-                            <select class="form__select" onchange="chargerDetailsClient()" id="nom2" name="nom2">
+                        <div class="select-dropdown" style="width: 100%; text-align: left;">
+                        <select class="form__select" onchange="chargerDetailsClient()" id="nom2" name="nom2">
                                 <option selected>Veuillez sélectionner un client</option>
                                 <!-- Les options seront ajoutées dynamiquement ici -->
                             </select>
@@ -139,8 +72,8 @@
                     </form>
                 </div>
                 <div class="client-details">
-                    <h4>Détails du client:</h4>
-                    <textarea id="clientDetails"></textarea>
+                <h4 style="margin-left: 28px;">Détails du client:</h4>
+                    <textarea id="clientDetails" style="width: 731px; height: 693px; margin-left: 30px;" required=""></textarea>
                     <input type="button" value="Modifier" class="btn" onclick="modifierDetailsClient()">
                 </div>
             </div>
