@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -45,8 +42,8 @@
     <div class="left-content">
         <h1>Logs</h1>
         <div class="log-container">
-            <textarea class="log-textarea" id="logTextArea" readonly></textarea>
-        </div>
+        <textarea class="log-textarea" id="logTextArea" readonly="" style="height: 882px;"></textarea>        
+    </div>
     </div>
 
     <script>
