@@ -114,7 +114,7 @@
                     <label for="nom">Nom du client:</label><br>
                         <input type="text" id="nom" name="nom" style="width: 100%;" required><br>
                         <label for="details">Détails:</label><br>
-                        <textarea id="details" name="details" style="width: 700px; height: 650px;"></textarea>
+                        <textarea id="details" name="details" style="width: 600px; height: 650px;"></textarea>
                         <input type="submit" value="ADD" class="btn">
                         <span id="successMessage"></span>
                         <label id="msg"></label><br>
@@ -142,7 +142,7 @@
                 <div class="client-details">
                 <h4 style="margin-left: -1px;">Détails du client:</h4>
                 <br>
-                    <textarea id="clientDetails" style="width: 720px; height: 580px;"></textarea>
+                    <textarea id="clientDetails" style="width: 650x; height: 570px;"></textarea>
                     <input type="button" value="Modifier" class="btn" onclick="modifierDetailsClient()">
                 </div>
             </div>
