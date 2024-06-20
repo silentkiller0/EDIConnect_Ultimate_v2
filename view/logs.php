@@ -16,25 +16,32 @@
             color: #6697a1;
         }
         .left-content {
-            width: 98%;
-            height: 970px;
+            width: calc(100% - 40px); /* Largeur totale moins les marges */
+            height: calc(100% - 40px); /* Hauteur totale moins les marges */
+            margin: 20px; /* Marge de 20px tout autour */
             display: flex; /* Utilisation d'une disposition flex */
             flex-direction: column; /* Alignement vertical des éléments */
             align-items: center; /* Centrage horizontal des éléments */
         }
         .log-container {
             width: 100%;
-            max-width: 800px;
-            margin-top: 20px;
+            height: 100%;
+            padding: 0 20px; /* Ajout de padding de 20px sur les côtés */
+            box-sizing: border-box; /* Inclut le padding dans la largeur totale */
         }
-       .log-textarea {
-            width: 98%; /* Utilise la largeur complète du conteneur parent */
-            height: 900px; /* Hauteur de la zone de texte */
+        .log-textarea {
+            width: 100%; /* Utilise la largeur complète du conteneur parent */
+            height: 100%; /* Utilise la hauteur complète du conteneur parent */
             margin-top: 0px; /* Marge supérieure pour séparer du contenu précédent */
-            padding: 10px; /* Ajout de rembourrage pour plus d'espace à l'intérieur */
+            padding: 5px; /* Ajout de rembourrage pour plus d'espace à l'intérieur */
             box-sizing: border-box; /* Inclut la bordure et le rembourrage dans la largeur/hauteur */
-            resize: vertical; /
-
+            resize: vertical; /* Permet le redimensionnement vertical */
+            overflow-y: auto; /* Active le défilement vertical lorsque nécessaire */
+            border: 1px solid #ccc; /* Bordure grise */
+            border-radius: 8px; /* Coins arrondis */
+            font-family: Arial, sans-serif; /* Police de caractères */
+            font-size: 14px; /* Taille de police */
+            line-height: 1.6; /* Hauteur de ligne */
         }
     </style>
 </head>
@@ -42,8 +49,8 @@
     <div class="left-content">
         <h1>Logs</h1>
         <div class="log-container">
-        <textarea class="log-textarea" id="logTextArea" readonly="" style="height: 882px;"></textarea>        
-    </div>
+            <textarea class="log-textarea" id="logTextArea" readonly></textarea>        
+        </div>
     </div>
 
     <script>
@@ -63,4 +70,3 @@
     </script>
 </body>
 </html>
-

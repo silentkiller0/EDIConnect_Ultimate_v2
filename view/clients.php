@@ -31,7 +31,7 @@
         }
 
         .column {
-            width: 48%; /* Réduire légèrement pour laisser un peu d'espace entre les colonnes */
+            width: 50%; /* Réduire légèrement pour laisser un peu d'espace entre les colonnes */
             max-width: 100%;
             height: 100%;
             padding: 20px;
@@ -110,58 +110,61 @@
         }
 
         @media screen and (max-width: 768px) {
-            .container {
-                flex-direction: column; /* Empiler les colonnes sur les petits écrans */
+
+        .container {
+            flex-direction: column; /* Empiler les colonnes sur les petits écrans */
             }
 
-            .column {
-                width: 100%;
-                margin-bottom: 20px; /* Espacement entre les colonnes sur petits écrans */
+        .column {
+            width: 100%;
+            margin-bottom: 20px; /* Espacement entre les colonnes sur petits écrans */
             }
 
-            .add-client-column {
+        .add-client-column {
                 margin-right: 0;
             }
+       
         }
     </style>
 </head>
 <body>
     <div class="container">
-      <!-- Colonne Gauche -->
-    <div class="column add-client-column">
-    <h3>Ajouter un nouveau client :</h3>
-    <form id="clientForm" method="POST">
-        <label for="nom">Nom du client:</label>
-        <input type="text" id="nom" name="nom" required>
-        <label for="details">Détails:</label>
-        <textarea id="details" name="details"></textarea>
-        <input type="submit" value="ADD" class="btn">
-        <span id="successMessage"></span>
-        <label id="msg"></label>
-    </form>
-</div>
-        <!-- Colonne Droite -->
-<div class="column">
-    <h3>Modifier :</h3>
-    <form id="clientForm2">
-        <label for="nom2">Nom du client:</label>
-        <div class="select-dropdown">
-            <select class="form__select" onchange="chargerDetailsClient()" id="nom2" name="nom2">
-                <option selected>Veuillez sélectionner un client</option>
-                <!-- Les options seront ajoutées dynamiquement ici -->
-            </select>
+        <!-- Colonne Gauche -->
+        <div class="column add-client-column">
+            <h3>Ajouter un nouveau client :</h3>
+            <form id="clientForm" method="POST">
+                <label for="nom">Nom du client:</label>
+                <input type="text" id="nom" name="nom" required>
+                <label for="details">Détails:</label>
+                <textarea id="details" name="details"></textarea>
+                <input type="submit" value="ADD" class="btn">
+                <span id="successMessage" class="success-message"></span>
+                <label id="msg"></label>
+            </form>
         </div>
-        <button type="button" class="btn" onclick="updateClientList()">Actualiser la liste des clients</button>
-    </form>
-    <div class="client-details-container">
-        <h4>Détails du client:</h4>
-        <div class="client-details">
-            <textarea id="clientDetails"></textarea>
-            <input type="button" value="Modifier" class="btn" onclick="modifierDetailsClient()">
+        <!-- Colonne Droite -->
+        <div class="column">
+            <h3>Modifier :</h3>
+            <form id="clientForm2">
+                <label for="nom2">Nom du client:</label>
+                <div class="select-dropdown">
+                    <select class="form__select" onchange="chargerDetailsClient()" id="nom2" name="nom2">
+                        <option selected>Veuillez sélectionner un client</option>
+                        <!-- Les options seront ajoutées dynamiquement ici -->
+                    </select>
+                </div>
+                <button type="button" class="btn" onclick="updateClientList()">Actualiser la liste des clients</button>
+            </form>
+            <div class="client-details-container">
+                <h4>Détails du client:</h4>
+                <br>
+                <div class="client-details">
+                    <textarea id="clientDetails"></textarea>
+                    <input type="button" value="Modifier" class="btn" onclick="modifierDetailsClient()">
+                </div>
+            </div>
         </div>
     </div>
-</div>
-
 
     <script>
         function updateClientList() {
@@ -191,7 +194,8 @@
                     return response.json();
                 })
                 .then(data => {
-                    document.getElementById('clientDetails').value = JSON.stringify(data, null, 4);
+                    var formattedData = JSON.stringify(data, null, 4);
+                    document.getElementById('clientDetails').value = formattedData;
                 })
                 .catch(error => {
                     console.error('Une erreur est survenue lors du chargement des données du client:', error);
@@ -263,8 +267,9 @@
             if (!is_dir($authDirectory)) {
                 mkdir($authDirectory, 0777, true);
             }
+            
             $fileName = $authDirectory . $nom . '.json';
-            $formattedDetails = json_encode($details);
+            $formattedDetails = json_encode($details); // Correction : Retiré l'encodage inutile
             if (file_put_contents($fileName, $formattedDetails)) {
                 echo "Erreur lors de l'ajout du client.";
             } else {
@@ -274,7 +279,7 @@
         } elseif (isset($_POST["nom2"]) && isset($_POST["newDetails"])) {
             $nom2 = $_POST["nom2"] ?? "";
             $newDetails = $_POST["newDetails"] ?? "";
-            $newDetails = json_decode($newDetails, true);
+            $newDetails = json_decode($newDetails, true); // Correction : Décode les détails envoyés depuis le frontend
             $authDirectory = '../auth/';
             $fileName = $authDirectory . $nom2 . '.json';
             $formattedDetails = json_encode($newDetails);

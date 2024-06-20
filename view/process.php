@@ -1,3 +1,21 @@
+<style>
+.activity-container1 {
+    display: flex;
+    align-items: center; /* Align items vertically in center */
+    justify-content: space-between; /* Distribute items with space in between */
+}
+
+.copy-icon {
+    cursor: pointer;
+    margin-left: 5px; /* Ajustez la marge à gauche selon vos préférences */
+}
+</style>
+
+<!-- Ajouter le lien vers Font Awesome dans le <head> -->
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
 <!-- ---------------- CLIENT ---------------- -->
 <div class="left-content">
     <div class="activities">
@@ -121,6 +139,7 @@
                     </div>
                 </div>
                 <!-- kezia -->
+                
                 <div class="input-container">
                     <input id="kezia" class="radio-button" type="radio" name="radio-endpoint" value="kezia">
                     <div class="radio-tile">
@@ -201,7 +220,7 @@
                     <input id="devis" class="radio-button" type="radio" name="radio-flux" value="devis">
                     <div class="radio-tile">
                         <div class="icon walk-icon">
-                            <b id="test">Devis</b>
+                            <b id ="test">Devis</b>
                         </div>
                     </div>
                 </div>
@@ -237,7 +256,6 @@
         </div>
     </div>
 </div>
-
 <!-- ---------------- END FLUX ---------------- -->
 
 <!-- ---------------- FILTRE ---------------- -->
@@ -287,9 +305,10 @@
 <!-- ---------------- GENERATED LINK SECTION ---------------- -->
 <div class="left-content">
     <div class="activities">
-        <div class="activity-container">
+        <div class="activity-container1">
             <h3 class="subtitle">Lien généré :</h3>
-            <p id="generated-url"></p> <!-- Déplacez cette ligne ici -->
+            <p id="generated-url"></p>
+            <i class="fas fa-copy copy-icon" onclick="copyGeneratedUrl()"></i>
         </div>
     </div>
 </div>
@@ -297,6 +316,17 @@
 
 <!-- JavaScript -->
 <script>
+    function copyGeneratedUrl() {
+        const generatedUrlElement = document.getElementById('generated-url');
+        const tempTextarea = document.createElement('textarea');
+        tempTextarea.value = generatedUrlElement.textContent;
+        document.body.appendChild(tempTextarea);
+        tempTextarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextarea);
+        alert('URL copiée dans le presse-papiers !');
+    }
+
     document.querySelectorAll('.filtre-ck').forEach(checkbox => {
         checkbox.addEventListener('change', function() {
             if (this.checked) {
@@ -309,4 +339,3 @@
         });
     });
 </script>
-
