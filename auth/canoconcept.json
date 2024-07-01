@@ -1,8 +1,0 @@
-{
-    "WP_URL":"https://b2b.cano-concept.com",
-    "WP_PRODUCTS_ENDPOINT":"/wp-json/wc/v2/products",
-    "WP_CUSTOMERS_ENDPOINT":"/wp-json/wc/v2/customers",
-    "WP_ORDERS_ENDPOINT":"/wp-json/wc/v2/orders",
-    "WP_CLIENT_KEY":"ck_2ff269070e00a5b678d25f2cb8b6611489746e7a",
-    "WP_CLIENT_SECRET":"cs_6dc9b21f093a06932b0b165b4baddaf5dd264247"
-}
